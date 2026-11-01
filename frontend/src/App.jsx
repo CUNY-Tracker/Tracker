@@ -1,24 +1,30 @@
 import "./App.css";
 
-const App = () => {
-  
+function App() {
   return (
-    <div>
-      <header>
-        <h1>Tracker</h1>
-        <p>Help students to find their internship opportunities</p>
-      </header>
+    <div className="app">
+      <main className="hero">
+        <p className="hero-label">BUILT FOR CUNY STUDENTS</p>
 
-      <main>
-        <h2>Find "your" internship</h2>
-        <input type="text" placeholder="Search for internships..." />
-        <button>Search</button>
+        <h1>
+          Find your next <span>opportunity.</span>
+        </h1>
 
-        <h2>Post Your Information</h2>
-        <p>Click here to post your information.</p>
+        <p className="hero-description">
+          Explore internships, discover companies, and keep your
+          applications organized in one place.
+        </p>
+
+        <div className="search-box">
+          <input
+            type="text"
+            placeholder="Search by role, company, or location"
+          />
+          <button type="button">Search Jobs</button>
+        </div>
       </main>
     </div>
   );
-};
+}
 
 export default App;
