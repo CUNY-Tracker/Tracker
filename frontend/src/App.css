@@ -1,100 +1,100 @@
-.app {
-  min-height: 100vh;
-  background:
-    radial-gradient(ellipse at 50% 30%, #e8edff 0%, transparent 65%),
-    #f8faff;
-  font-family: Arial, sans-serif;
+
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #fff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+  --accent: #aa3bff;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+  --social-bg: rgba(244, 243, 236, 0.5);
+
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+
+  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --heading: system-ui, "Segoe UI", Roboto, sans-serif;
+  --mono: ui-monospace, Consolas, monospace;
+
+  font: 18px/145% var(--sans);
+  letter-spacing: 0.18px;
+  color-scheme: light;
+  color: var(--text);
+  background: var(--bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  padding: 40px 24px;
+* {
   box-sizing: border-box;
 }
 
-.hero-label {
-  color: #4365ed;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 4px;
-  margin-bottom: 32px;
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
 }
 
-.hero h1 {
-  color: #192338;
-  font-size: clamp(42px, 5vw, 80px);
-  font-weight: 800;
-  letter-spacing: -3px;
-  line-height: 1.12;
-  margin: 0 0 28px;
+#root {
+  min-height: 100vh;
 }
 
-.hero h1 span {
-  color: #4365ed;
+h1,
+h2 {
+  color: var(--text-h);
+  font-family: var(--heading);
 }
 
-.hero-description {
-  color: #687891;
-  font-size: 20px;
-  line-height: 1.8;
-  max-width: 850px;
-  margin: 0 0 48px;
+button,
+input {
+  font: inherit;
 }
 
-.search-box {
-  width: 100%;
-  max-width: 930px;
-  display: flex;
-  gap: 12px;
-  padding: 10px;
-  border: 1px solid #dbe3f6;
-  border-radius: 18px;
-  background: white;
-  box-sizing: border-box;
-  box-shadow: 0 12px 35px rgba(30, 60, 120, 0.06);
-}
-
-.search-box input {
-  flex: 1;
-  min-width: 0;
-  border: none;
-  outline: none;
-  padding: 12px 22px;
-  font-size: 18px;
-  background: transparent;
-  color: #192338;
-}
-
-.search-box button {
-  background: #4365ed;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 18px 26px;
-  font-size: 18px;
-  font-weight: 600;
+button {
   cursor: pointer;
 }
 
-@media (max-width: 600px) {
-  .hero h1 {
-    letter-spacing: -1.5px;
-  }
+a {
+  color: inherit;
+}
 
-  .hero-description {
+code {
+  font-family: var(--mono);
+  padding: 4px 8px;
+  background: var(--code-bg);
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.underlined {
+  text-decoration: underline;
+}
+
+hr {
+  margin: 0;
+  padding: 0;
+}
+
+@media (max-width: 1024px) {
+  :root {
     font-size: 16px;
-  }
-
-  .search-box {
-    flex-direction: column;
-  }
-
-  .search-box button {
-    width: 100%;
   }
 }
