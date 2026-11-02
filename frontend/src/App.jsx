@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import Navbar from "./Navbar";
 
 const App = () => {
   const [role, setRole] = useState("");
@@ -37,7 +38,7 @@ const App = () => {
         <h1>Tracker</h1>
         <p>Help students to find their internship opportunities</p>
       </header>
-
+      <Navbar />
       <main>
         <h2>Find "your" internship</h2>
 
