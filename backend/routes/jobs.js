@@ -1,35 +1,23 @@
 import express from 'express';
+import db from '../db.js';
 
 const router = express.Router();
 
-// Temporary job storage
-const jobs = [];
-let nextId = 1;
-
-// Get all posted jobs
-router.get('/', (req, res) => {
-  res.json(jobs);
+router.get('/:role', (req, res) => {
+  const {role} = req.params
+  const jobs = db.prepare(`SELECT * FROM jobs WHERE role = '${role}'`).all();
+  res.status(200).json(jobs);
 });
 
-// Post a new job
 router.post('/', (req, res) => {
   const { company, role, postedBy } = req.body;
-
   if (!company || !role) {
-    return res.status(400).json({
-      error: 'Company and role are required'
-    });
+    return res.status(400).json({ error: 'Company and role are required' });
   }
-
-  const newJob = {
-    id: nextId++,
-    company,
-    role,
-    postedBy: postedBy || 'student'
-  };
-
-  jobs.push(newJob);
-
+  const result = db
+    .prepare('INSERT INTO jobs (company, role, postedBy) VALUES (?, ?, ?)')
+    .run(company, role, postedBy || 'student');
+  const newJob = db.prepare('SELECT * FROM jobs WHERE id = ?').get(result.lastInsertRowid);
   res.status(201).json(newJob);
 });
 

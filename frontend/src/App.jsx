@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import Navbar from "./Navbar";
 
 const App = () => {
   const [role, setRole] = useState("");
@@ -34,12 +35,21 @@ const App = () => {
   return (
     <div>
       <header>
-        <h1>Tracker</h1>
-        <p>Help students to find their internship opportunities</p>
+        <h1>Welcome to Trackers!</h1>
+        <p className="motto">
+          Help students find their <br />
+          internship opportunities.
+        </p>
       </header>
 
+      <Navbar />
+
+      <hr />
+
       <main>
-        <h2>Find "your" internship</h2>
+        <h2>
+          Find <span className="underlined">Your</span> Internship.
+        </h2>
 
         <div className="search">
           <input
@@ -48,7 +58,6 @@ const App = () => {
             value={role}
             onChange={(e) => setRole(e.target.value)}
           />
-
           <button onClick={search}>Search</button>
         </div>
 
@@ -71,8 +80,8 @@ const App = () => {
           </div>
         )}
 
-        <h2>Post Your Information</h2>
-        <p>Click here to post your information.</p>
+        <h2>Or, look at the several our community has posted.</h2>
+        <p>(they would go here)</p>
       </main>
     </div>
   );
