@@ -5,6 +5,7 @@
  */
 
 import app from '../app.js';
+import { setupDatabase } from '../db.js';
 import createDebug from 'debug';
 import http from 'node:http';
 
@@ -28,6 +29,7 @@ const server = http.createServer(app);
  */
 
 server.listen(port);
+await setupDatabase();
 server.on('error', onError);
 server.on('listening', onListening);
 
