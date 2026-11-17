@@ -11,8 +11,23 @@ db.exec(`
     company TEXT NOT NULL,
     role TEXT NOT NULL,
     postedBy TEXT DEFAULT 'student',
+    deadline TEXT,
+    description TEXT,
+    applicationLink TEXT,
     createdAt TEXT DEFAULT CURRENT_TIMESTAMP
   )
 `);
+
+// If someone already has an old jobs.db, add the new columns to it
+const existingColumns = db
+  .prepare('PRAGMA table_info(jobs)')
+  .all()
+  .map((column) => column.name);
+
+for (const column of ['deadline', 'description', 'applicationLink']) {
+  if (!existingColumns.includes(column)) {
+    db.exec(`ALTER TABLE jobs ADD COLUMN ${column} TEXT`);
+  }
+}
 
 export default db;
