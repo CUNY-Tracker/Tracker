@@ -1,3 +1,4 @@
+
 import createError from 'http-errors';
 import express from 'express';
 import path from 'node:path';
@@ -5,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
+import session from 'express-session';
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
@@ -23,6 +25,24 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
+
+// Session setup for student login
+if (!process.env.SESSION_SECRET) {
+  throw new Error('SESSION_SECRET must be set in backend/.env');
+}
+
+app.use(session({
+  name: 'internship.sid',
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+    maxAge: 1000 * 60 * 60 * 24
+  }
+}));
 
 app.use('/', indexRouter);
 app.use('/api/users', usersRouter);

@@ -1,7 +1,19 @@
+
 import express from 'express';
 import db from '../db.js';
 
 const router = express.Router();
+
+// Require students to log in before accessing internships
+router.use((req, res, next) => {
+  if (!req.session?.userId) {
+    return res.status(401).json({
+      error: 'Please log in to access internships.'
+    });
+  }
+
+  next();
+});
 
 // GET /api/jobs -> all jobs, newest first (homepage)
 router.get('/', async (req, res, next) => {
@@ -23,10 +35,11 @@ router.get('/:role', async (req, res, next) => {
 
     const result = await db.execute({
       sql: `SELECT * FROM jobs
-            WHERE role LIKE ? ESCAPE '\\'
+            WHERE role LIKE ? ESCAPE '\'
             ORDER BY createdAt DESC, id DESC`,
       args: [`%${escaped}%`],
     });
+
     res.status(200).json(result.rows);
   } catch (err) {
     next(err);
@@ -60,6 +73,7 @@ router.post('/', async (req, res, next) => {
       sql: 'SELECT * FROM jobs WHERE id = ?',
       args: [insert.lastInsertRowid],
     });
+
     res.status(201).json(newJob.rows[0]);
   } catch (err) {
     next(err);

@@ -1,3 +1,4 @@
+
 import 'dotenv/config';
 import { createClient } from '@libsql/client';
 
@@ -31,6 +32,17 @@ export async function setupDatabase() {
       await db.execute(`ALTER TABLE jobs ADD COLUMN ${column} TEXT`);
     }
   }
+
+  // Create a table for student accounts
+  await db.execute(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT NOT NULL UNIQUE,
+      passwordHash TEXT NOT NULL,
+      cunySchool TEXT NOT NULL,
+      createdAt TEXT DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
 
   console.log(
     process.env.TURSO_DATABASE_URL
