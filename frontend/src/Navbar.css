@@ -5,6 +5,8 @@
   padding: 12px 24px;
   background: #1f2937;
   color: white;
+  position: sticky;
+  top: 0;
 }
 
 .navbar-brand {
@@ -28,4 +30,12 @@
 
 .nav-links a:hover {
   text-decoration: underline;
+}
+
+.gradient-after-navbar {
+  background: linear-gradient(rgba(180,180,180,0.6), rgba(180,180,180,0));
+  height: 50px;
+  position: sticky;
+  top: 50px;
+  z-index: 0;
 }

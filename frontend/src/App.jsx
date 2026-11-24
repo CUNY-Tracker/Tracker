@@ -215,21 +215,24 @@ const App = () => {
   return (
     <div>
       {/* Website header */}
-      <header>
-        <h1>Tracker</h1>
-        <p>Help students to find their internship opportunities</p>
-      </header>
-
-      <Navbar />
+        <div className="hero">
+          <div className="gradient-before-navbar" />
+          <header className="hero-content">
+           <h1>Tracker</h1>
+           <p>Help <br/> students <br/> find <br/> opportunities. </p>
+          </header>
+        </div>
+        <Navbar />
+        <div className="gradient-after-navbar" />
 
       <main>
-        <h2>Find "your" internship</h2>
+        <h2>Find <i>your</i> internship.</h2>
 
         {/* Search form */}
         <form className="search" onSubmit={search}>
           <input
             type="text"
-            placeholder="Search for internships..."
+            placeholder="Search"
             value={role}
             onChange={(event) => setRole(event.target.value)}
           />
@@ -260,29 +263,9 @@ const App = () => {
           </section>
         )}
 
-        {/* Display the six most recent internships */}
-        <section className="jobs-section">
-          <h2>Recent Internships</h2>
-
-          {recentError && <p>{recentError}</p>}
-
-          {recentJobs.length === 0 && !recentError ? (
-            <p>No internships posted yet.</p>
-          ) : (
-            <div className="jobs-list">
-              {recentJobs.map(renderJobCard)}
-            </div>
-          )}
-        </section>
-
         {/* Internship posting section */}
         <section className="post-section">
-          <h2>Share an Internship Opportunity</h2>
-
-          <p>
-            Found an internship opportunity?
-            Share it with other students!
-          </p>
+          <h2>Found an opportunity? Share it with other students!</h2>
 
           {/* Toggle the posting form */}
           <button
@@ -330,11 +313,6 @@ const App = () => {
                 onChange={(event) => setPostedBy(event.target.value)}
               />
 
-              {/* Optional internship details */}
-              <label htmlFor="deadline">
-                Application Deadline
-              </label>
-
               <input
                 id="deadline"
                 type="date"
@@ -342,7 +320,7 @@ const App = () => {
                 onChange={(event) => setDeadline(event.target.value)}
               />
 
-              <textarea
+              <input
                 placeholder="Job Description (optional)"
                 value={description}
                 onChange={(event) => setDescription(event.target.value)}
@@ -372,6 +350,21 @@ const App = () => {
           {/* Display the result of the submission */}
           {postMessage && (
             <p role="status">{postMessage}</p>
+          )}
+        </section>
+
+        {/* Display the six most recent internships */}
+        <section className="jobs-section">
+          <h2>Recent Internships</h2>
+
+          {recentError && <p>{recentError}</p>}
+
+          {recentJobs.length === 0 && !recentError ? (
+            <p>No internships posted yet.</p>
+          ) : (
+            <div className="jobs-list">
+              {recentJobs.map(renderJobCard)}
+            </div>
           )}
         </section>
       </main>

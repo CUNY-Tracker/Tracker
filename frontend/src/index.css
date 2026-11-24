@@ -11,9 +11,7 @@
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
-  --heading: system-ui, "Segoe UI", Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+  
 
   font: 18px/145% var(--sans);
   letter-spacing: 0.18px;
@@ -57,7 +55,6 @@ body {
 
 h1,
 h2 {
-  font-family: var(--heading);
   font-weight: 500;
   color: var(--text-h);
 }
@@ -121,4 +118,36 @@ main {
 hr {
   margin: 0;
   padding: 0;
+}
+
+h1, h2 {
+  font-family: 'Albert Sans', sans-serif;
+}
+
+h1 {
+  font-size: 100px;
+}
+
+header p {
+  font-family: 'Albert Sans', sans-serif;
+  font-size: 120%;
+}
+
+.gradient-before-navbar {
+  background: linear-gradient(#ffffff, #e1e1e1);
+  height: 50px;
+  padding: 100px;
+}
+
+.hero {
+  position: relative;
+}
+
+.hero-content {
+  position: absolute;
+  inset: 0;              
+  display: flex;
+  align-items: center;   
+  justify-content: center;
+  z-index: 1;
 }

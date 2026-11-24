@@ -44,12 +44,6 @@ body {
   min-height: 100vh;
 }
 
-h1,
-h2 {
-  color: var(--text-h);
-  font-family: var(--heading);
-}
-
 button,
 input {
   font: inherit;
@@ -82,6 +76,7 @@ main {
   align-items: center;
   justify-content: center;
   gap: 12px;
+  text-align: center;
 }
 
 .underlined {
@@ -96,5 +91,24 @@ hr {
 @media (max-width: 1024px) {
   :root {
     font-size: 16px;
+  }
+}
+
+.jobs-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 columns */
+  gap: 1.5rem;
+}
+
+/* Narrow screens: 2 columns, then 1 */
+@media (max-width: 900px) {
+  .jobs-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .jobs-list {
+    grid-template-columns: 1fr;
   }
 }
