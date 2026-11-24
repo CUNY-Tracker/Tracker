@@ -1,9 +1,11 @@
-
+import { Routes, Route, Link } from "react-router-dom";
+import Explore from "./pages/Explore";
 import { useEffect, useState } from "react";
 import "./App.css";
 import Navbar from "./Navbar";
+import Post from "./pages/Post";
 
-const App = () => {
+const LegacyHome = () => {
   // Search states
   const [role, setRole] = useState("");
   const [jobs, setJobs] = useState([]);
@@ -16,21 +18,9 @@ const App = () => {
   const [recentError, setRecentError] = useState("");
   const [expandedJobId, setExpandedJobId] = useState(null);
 
-  // Control the visibility of the posting form
-  const [showPostForm, setShowPostForm] = useState(false);
-
-  // Post internship states
-  const [company, setCompany] = useState("");
-  const [newRole, setNewRole] = useState("");
-  const [postedBy, setPostedBy] = useState("");
-  const [deadline, setDeadline] = useState("");
-  const [description, setDescription] = useState("");
-  const [applicationLink, setApplicationLink] = useState("");
-  const [posting, setPosting] = useState(false);
-  const [postMessage, setPostMessage] = useState("");
-
-  // Load the six most recent internships
-  const loadRecentJobs = async () => {
+// Load internships when the page first opens
+useEffect(() => {
+  const fetchRecentJobs = async () => {
     try {
       const response = await fetch("/api/jobs");
 
@@ -52,10 +42,8 @@ const App = () => {
     }
   };
 
-  // Load internships when the page first opens
-  useEffect(() => {
-    loadRecentJobs();
-  }, []);
+  fetchRecentJobs();
+}, []);
 
   // Search internships by job title
   const search = async (event) => {
@@ -92,68 +80,6 @@ const App = () => {
       setError("Unable to load internships. Please try again.");
     } finally {
       setLoading(false);
-    }
-  };
-
-  // Save a new internship through the backend API
-  const postInternship = async (event) => {
-    event.preventDefault();
-
-    if (!company.trim() || !newRole.trim() || posting) return;
-
-    setPosting(true);
-    setPostMessage("");
-
-    try {
-      const response = await fetch("/api/jobs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          company: company.trim(),
-          role: newRole.trim(),
-          postedBy: postedBy.trim() || "student",
-          deadline: deadline || null,
-          description: description.trim() || null,
-          applicationLink: applicationLink.trim() || null,
-        }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to post internship");
-      }
-
-      const newJob = await response.json();
-
-      setPostMessage("Internship posted successfully!");
-
-      // Add the new job to matching search results
-      if (
-        searched &&
-        newJob.role.toLowerCase().includes(role.trim().toLowerCase())
-      ) {
-        setJobs((previousJobs) => [newJob, ...previousJobs]);
-      }
-
-      // Clear the form after a successful submission
-      setCompany("");
-      setNewRole("");
-      setPostedBy("");
-      setDeadline("");
-      setDescription("");
-      setApplicationLink("");
-
-      // Close the form after the internship is posted
-      setShowPostForm(false);
-
-      // Refresh the recent internship cards
-      await loadRecentJobs();
-    } catch (err) {
-      console.error("Post error:", err);
-      setPostMessage("Failed to post internship. Please try again.");
-    } finally {
-      setPosting(false);
     }
   };
 
@@ -214,14 +140,6 @@ const App = () => {
 
   return (
     <div>
-      {/* Website header */}
-      <header>
-        <h1>Tracker</h1>
-        <p>Help students to find their internship opportunities</p>
-      </header>
-
-      <Navbar />
-
       <main>
         <h2>Find "your" internship</h2>
 
@@ -274,8 +192,8 @@ const App = () => {
             </div>
           )}
         </section>
-
-        {/* Internship posting section */}
+        
+        {/* Link to the internship posting page */}
         <section className="post-section">
           <h2>Share an Internship Opportunity</h2>
 
@@ -284,97 +202,32 @@ const App = () => {
             Share it with other students!
           </p>
 
-          {/* Toggle the posting form */}
-          <button
-            type="button"
-            className="post-toggle-button"
-            onClick={() => {
-              setShowPostForm((previous) => !previous);
-              setPostMessage("");
-            }}
-            aria-expanded={showPostForm}
-            aria-controls="internship-post-form"
-            disabled={posting}
-          >
-            {showPostForm ? "Cancel" : "+ Post Internship"}
-          </button>
-
-          {/* Show the form only when the button is clicked */}
-          {showPostForm && (
-            <form
-              id="internship-post-form"
-              className="post-form"
-              onSubmit={postInternship}
-            >
-              {/* Required internship information */}
-              <input
-                type="text"
-                placeholder="Company Name"
-                value={company}
-                onChange={(event) => setCompany(event.target.value)}
-                required
-              />
-
-              <input
-                type="text"
-                placeholder="Job Title"
-                value={newRole}
-                onChange={(event) => setNewRole(event.target.value)}
-                required
-              />
-
-              <input
-                type="text"
-                placeholder="Posted By (optional)"
-                value={postedBy}
-                onChange={(event) => setPostedBy(event.target.value)}
-              />
-
-              {/* Optional internship details */}
-              <label htmlFor="deadline">
-                Application Deadline
-              </label>
-
-              <input
-                id="deadline"
-                type="date"
-                value={deadline}
-                onChange={(event) => setDeadline(event.target.value)}
-              />
-
-              <textarea
-                placeholder="Job Description (optional)"
-                value={description}
-                onChange={(event) => setDescription(event.target.value)}
-              />
-
-              <input
-                type="url"
-                placeholder="Application Link (optional)"
-                value={applicationLink}
-                onChange={(event) => setApplicationLink(event.target.value)}
-              />
-
-              {/* Submit the internship to the backend */}
-              <button
-                type="submit"
-                disabled={
-                  posting ||
-                  !company.trim() ||
-                  !newRole.trim()
-                }
-              >
-                {posting ? "Posting..." : "Submit Internship"}
-              </button>
-            </form>
-          )}
-
-          {/* Display the result of the submission */}
-          {postMessage && (
-            <p role="status">{postMessage}</p>
-          )}
+          <Link to="/post" className="post-toggle-button">
+            + Post Internship
+          </Link>
         </section>
       </main>
+    </div>
+  );
+};
+
+// Main application with page routing
+// Shared layout for all pages
+const App = () => {
+  return (
+    <div>
+      <header>
+        <h1>Tracker</h1>
+        <p>Help students to find their internship opportunities</p>
+      </header>
+
+      <Navbar />
+
+      <Routes>
+        <Route path="/" element={<LegacyHome />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/post" element={<Post />} />
+      </Routes>
     </div>
   );
 };

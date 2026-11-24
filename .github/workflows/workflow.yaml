@@ -9,6 +9,18 @@ on:
     branches:
       - main
 
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: Terraform operation
+        required: true
+        default: plan
+        type: choice
+        options:
+          - validate
+          - plan
+          - apply
+
 permissions:
   contents: read
 
@@ -20,12 +32,14 @@ env:
 jobs:
   validate:
     name: Validate
-    if: github.event_name == 'pull_request'
+    if: >-
+      github.event_name == 'pull_request' ||
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: infra
+        working-directory: terraform
 
     steps:
       - uses: actions/checkout@v7
@@ -47,8 +61,14 @@ jobs:
     name: Plan
     needs: validate
     if: >-
-      github.event_name == 'pull_request' &&
-      github.event.pull_request.head.repo.full_name == github.repository
+      (
+        github.event_name == 'pull_request' &&
+        github.event.pull_request.head.repo.full_name == github.repository
+      ) ||
+      (
+        github.event_name == 'workflow_dispatch' &&
+        inputs.operation == 'plan'
+      )
     runs-on: ubuntu-latest
 
     permissions:
@@ -57,7 +77,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: infra
+        working-directory: terraform
 
     steps:
       - uses: actions/checkout@v7
@@ -80,9 +100,23 @@ jobs:
 
   apply:
     name: Apply
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: validate
+    if: >-
+      always() &&
+      !cancelled() &&
+      github.ref == 'refs/heads/main' &&
+      (
+        (
+          github.event_name == 'push' &&
+          needs.validate.result == 'skipped'
+        ) ||
+        (
+          github.event_name == 'workflow_dispatch' &&
+          inputs.operation == 'apply' &&
+          needs.validate.result == 'success'
+        )
+      )
     runs-on: ubuntu-latest
-    environment: production
 
     concurrency:
       group: terraform-production
